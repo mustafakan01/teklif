@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bir Soru Var...</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: linear-gradient(to top right, #ff69b4, #ffe4e1);
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: bgShift 10s infinite alternate;
+    }
+
+    @keyframes bgShift {
+      0% { background: linear-gradient(to top right, #ff69b4, #ffe4e1); }
+      100% { background: linear-gradient(to top right, #ff1493, #ffb6c1); }
+    }
+
+    .container {
+      text-align: center;
+      color: white;
+      z-index: 10;
+    }
+
+    h1 {
+      font-size: 3rem;
+      animation: zoomIn 2s ease-out forwards;
+    }
+
+    @keyframes zoomIn {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      transform: rotate(45deg);
+      animation: floatHearts 6s infinite linear;
+    }
+
+    .heart::before, .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes floatHearts {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    button {
+      padding: 1em 2em;
+      margin: 1em;
+      font-size: 1.5rem;
+      border: none;
+      border-radius: 25px;
+      background-color: hotpink;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px white;
+      animation: heartbeat 1s infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    #confetti {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9;
+    }
+  </style>
+</head>
+<body>
+
+<div id="confetti"></div>
+
+<div class="container">
+  <h1 id="mainText">Sana bir soru var...</h1>
+  <div id="buttons" style="display:none;">
+    <button onclick="answer('evet')">Evet!</button>
+    <button onclick="answer('tabii ki evet')">Tabii ki evet!</button>
+  </div>
+</div>
+
+<script>
+  const text = "Benimle çıkar mısın?";
+  const h1 = document.getElementById('mainText');
+  let i = 0;
+
+  setTimeout(() => {
+    const typer = setInterval(() => {
+      h1.textContent = text.slice(0, ++i);
+      if (i === text.length) {
+        clearInterval(typer);
+        document.getElementById('buttons').style.display = 'block';
+        generateHearts();
+        launchConfetti();
+      }
+    }, 100);
+  }, 2000);
+
+  function answer(msg) {
+    alert("Yuppii! 🎉 Cevap: " + msg);
+  }
+
+  function generateHearts() {
+    for (let i = 0; i < 30; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (3 + Math.random() * 5) + 's';
+      document.body.appendChild(heart);
+    }
+  }
+
+  function launchConfetti() {
+    const confetti = document.getElementById('confetti');
+    for (let i = 0; i < 150; i++) {
+      const c = document.createElement('div');
+      c.style.position = 'absolute';
+      c.style.width = '10px';
+      c.style.height = '10px';
+      c.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+      c.style.top = Math.random() * 100 + '%';
+      c.style.left = Math.random() * 100 + '%';
+      c.style.animation = `confettiFall ${3 + Math.random() * 5}s linear infinite`;
+      confetti.appendChild(c);
+    }
+  }
+
+  // Optionally add music
+  // const audio = new Audio("your-music-url.mp3");
+  // audio.play();
+</script>
+</body>
+</html>
